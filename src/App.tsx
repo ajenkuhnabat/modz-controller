@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { ChangeEvent, useState } from "react";
-// import { Gpio } from "onoff";
+import { Gpio } from "onoff";
 import Button from '@mui/material/Button';
 import { Input, Typography } from "@mui/material";
 
-// const pin4 = new Gpio(4, 'out'); // use GPIO pin 4, and specify that it is output
+const pin = new Gpio(4, 'out'); // use GPIO pin 4, and specify that it is output
+const toggle_high_low = true;
 
 function App() {
   const [duration, setDuration] = useState<number>(5);
@@ -14,6 +15,8 @@ function App() {
 
   useEffect(() => {
     console.log("switched pin 4 to " + (pinState ? 'on' : 'off'));
+    const realPinState = pinState !== toggle_high_low;
+    pin.writeSync(realPinState ? 0 : 1);
   }, [pinState]);
 
   useEffect(() => {
