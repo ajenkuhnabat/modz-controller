@@ -11,6 +11,7 @@ declare module 'onoff' {
         constructor(gpio: number, direction: 'in' | 'out', edge?: 'none' | 'falling' | 'rising' | 'both', options?: GpioOptions);
         read(callback: (err: Error | null, value: number) => void): void;
         write(value: number, callback?: (err: Error | null) => void): void;
+        writeSync(value: number, callback?: (err: Error | null) => void): void;
         unexport(): void;
     }
 }
