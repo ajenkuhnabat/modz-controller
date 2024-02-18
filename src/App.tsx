@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { ChangeEvent, useState } from "react";
-import { Gpio } from "onoff";
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 import Button from '@mui/material/Button';
 import { Input, Typography } from "@mui/material";
 
-const pin = new Gpio(4, 'out'); // use GPIO pin 4, and specify that it is output
 const toggle_high_low = true;
 
 function App() {
@@ -12,11 +11,30 @@ function App() {
   // const [pinNumber, setPinNumber] = useState<number>(4);
   const [secondsLeft, setSecondsLeft] = useState<number>(0);
   const [pinState, setPinState] = useState<boolean>(false);
+  const [socketUrl, setSocketUrl] = useState('ws://' + window.location.hostname);
+  const [messageHistory, setMessageHistory] = useState<Array<string>>([]);
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: 'Connecting',
+    [ReadyState.OPEN]: 'Open',
+    [ReadyState.CLOSING]: 'Closing',
+    [ReadyState.CLOSED]: 'Closed',
+    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+  }[readyState];
 
   useEffect(() => {
-    console.log("switched pin 4 to " + (pinState ? 'on' : 'off'));
+    if (lastMessage !== null) {
+      setMessageHistory(messageHistory.concat(lastMessage.data));
+    }
+  }, [lastMessage, setMessageHistory]);
+
+  useEffect(() => {
+    console.log("switching pin 4 to " + (pinState ? 'on' : 'off'));
     const realPinState = pinState !== toggle_high_low;
-    pin.writeSync(realPinState ? 0 : 1);
+    sendMessage('{gpio:' + (realPinState ? 0 : 1) + '}');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pinState]);
 
   useEffect(() => {
