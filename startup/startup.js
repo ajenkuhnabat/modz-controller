@@ -3,31 +3,32 @@ const thisIsRaspberry = false;
 const webappPath      = __dirname + '/../build';
 const express         = require('express');
 const app             = express();
-const server          = app.listen(80);
-const ws = require('ws');
+const ws              = require('ws');
+app.listen(80);
 const wss = new ws.WebSocketServer({ port: 8088 })
 app.use(express.static(webappPath));
 let pushButton;
 let gpio;
+
+// const blink = (times, delay) => {
+//   if (gpio) for (let i=0; i<times; i++) {
+//     setTimeout(gpio.writeSync(i%2), i*delay);
+//   };
+// }
 
 // startup with some blinking led to check gpio connection
 if (thisIsRaspberry) {
   const Gpio = require('onoff').Gpio;
   gpio = new Gpio(4, 'out');
   pushButton = new Gpio(17, 'in', 'both');
-
-  gpio.writeSync(1);
-  setTimeout((()=>{gpio.writeSync(0);},100))
-  setTimeout((()=>{gpio.writeSync(1);},200))
-  setTimeout((()=>{gpio.writeSync(0);},300))
-  setTimeout((()=>{gpio.writeSync(1);},400))
-  setTimeout((()=>{gpio.writeSync(0);},500))
+  // blink(5, 200);
 }
 
 app.use(express.static(webappPath));
 
 wss.on("connection", function(ws) {
   console.log("connection on websocket");
+  // blink(2, 400);
   ws.on('message', function message(data) {
     console.log('received: %s', data);
     let gpiovalue = parseInt(JSON.parse(data).gpio);
