@@ -32,14 +32,6 @@ wss.on("connection", function(ws) {
   ws.on('message', function message(data) {
     console.log('received: %s', data);
     let gpiovalue = parseInt(JSON.parse(data).gpio);
-    if (pushButton) {
-      pushButton.watch(function (err, value) { //Watch for hardware interrupts on pushButton
-      if (err) { //if an error
-        console.error('There was an error', err); //output error message to console
-        return;
-      }
-      gpiovalue = value;
-    })};
     if (gpio) {
       if (gpiovalue !== gpio.readSync()) { //only change GPIO if status has changed
         gpio.writeSync(gpiovalue); //turn GPIO on or off
