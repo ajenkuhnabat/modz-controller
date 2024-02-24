@@ -1,0 +1,13 @@
+[Unit]
+Description=MODZ Controller Service
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi/modz-controller
+ExecStart=/usr/bin/npm start
+Restart=on-failure
+User=pi
+Environment=PORT=8080
+
+[Install]
+WantedBy=multi-user.target
