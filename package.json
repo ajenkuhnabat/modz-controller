@@ -14,9 +14,7 @@
     "@types/node": "^16.18.79",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.18",
-    "@types/socket.io": "^3.0.2",
     "express": "^4.18.2",
-    "express-ws": "^5.0.2",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.2.0",
     "http": "^0.0.1-security",
@@ -27,10 +25,8 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "react-use-websocket": "^4.7.0",
-    "socket.io": "^4.7.4",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
-    "websocket": "^1.0.34",
     "ws": "^8.16.0"
   },
   "scripts": {
