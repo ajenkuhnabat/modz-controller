@@ -5,15 +5,14 @@ import Button from '@mui/material/Button';
 import { Input, Typography } from "@mui/material";
 
 const toggle_high_low = true;
+const socketUrl = 'ws://' + window.location.hostname + ':8088';
 
 function App() {
   const [duration, setDuration] = useState<number>(5);
   // const [pinNumber, setPinNumber] = useState<number>(4);
   const [secondsLeft, setSecondsLeft] = useState<number>(0);
   const [pinState, setPinState] = useState<boolean>(false);
-  const [socketUrl, setSocketUrl] = useState('ws://' + window.location.hostname);
   const [messageHistory, setMessageHistory] = useState<Array<string>>([]);
-
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
   const connectionStatus = {
@@ -28,12 +27,13 @@ function App() {
     if (lastMessage !== null) {
       setMessageHistory(messageHistory.concat(lastMessage.data));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastMessage, setMessageHistory]);
 
   useEffect(() => {
-    console.log("switching pin 4 to " + (pinState ? 'on' : 'off'));
+    console.log("switching GPIO 4 to " + (pinState ? 'on' : 'off'));
     const realPinState = pinState !== toggle_high_low;
-    sendMessage('{gpio:' + (realPinState ? 0 : 1) + '}');
+    sendMessage('{"gpio":"' + (realPinState ? 0 : 1) + '"}');
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pinState]);
 
@@ -60,12 +60,9 @@ function App() {
   return (
     <div style={{background: 'lightgrey', height: "100vh", padding: 10}}>
         <Typography variant='h4'>MODZ Controller</Typography>
-        {/* <div>
-          <Typography>Pin-Nummer: </Typography>
-          <Input value={pinNumber} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-            setPinNumber(e.target.value ? parseInt(e.target.value) : -1);
-          }} /> 
-        </div> */}
+        <div>
+          <Typography>Verbindung zu {socketUrl} - {readyState} - {connectionStatus} </Typography>
+        </div>
         <div>
           <Typography>Drehdauer in Sekunden: </Typography>
           <Input value={duration} disabled={secondsLeft > 0} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
