@@ -4,7 +4,7 @@ const webappPath      = __dirname + '/../build';
 const express         = require('express');
 const app             = express();
 const ws              = require('ws');
-app.listen(80);
+app.listen(8080);
 const wss = new ws.WebSocketServer({ port: 8088 })
 app.use(express.static(webappPath));
 let pushButton;
