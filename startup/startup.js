@@ -1,5 +1,5 @@
 // startup.js
-const thisIsRaspberry = false;
+const thisIsRaspberry = true;
 const webappPath      = __dirname + '/../build';
 const express         = require('express');
 const app             = express();
