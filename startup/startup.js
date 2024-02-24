@@ -1,11 +1,11 @@
 // startup.js
-const thisIsRaspberry = true;
+const thisIsRaspberry = false;
 const webappPath      = __dirname + '/../build';
 const express         = require('express');
 const app             = express();
 const server          = app.listen(80);
-const WebSocketServer = require('ws').WebSocketServer;
-const wss = new WebSocketServer({ port: 8088 })
+const ws = require('ws');
+const wss = new ws.WebSocketServer({ port: 8088 })
 app.use(express.static(webappPath));
 let pushButton;
 let gpio;
@@ -30,7 +30,7 @@ wss.on("connection", function(ws) {
   console.log("connection on websocket");
   ws.on('message', function message(data) {
     console.log('received: %s', data);
-    let gpiovalue = JSON.parse(data).gpio;
+    let gpiovalue = parseInt(JSON.parse(data).gpio);
     if (pushButton) {
       pushButton.watch(function (err, value) { //Watch for hardware interrupts on pushButton
       if (err) { //if an error
