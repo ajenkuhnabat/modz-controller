@@ -31,8 +31,6 @@
   },
   "scripts": {
     "start": "node ./startup/startup.js",
-    "install": "npm run build && sudo cp modz-controller.service /etc/systemd/system && sudo systemctl enable modz-controller.service && sudo systemctl start modz-controller.service",
-    "uninstall": "sudo systemctl stop modz-controller.service && sudo systemctl disable modz-controller.service && sudo rm /etc/systemd/system/modz-controller.service",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
